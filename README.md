@@ -1,2 +1,5 @@
 # technical-exercise
 a two-tier webapp designed to be intentionally misconfigured and later secured, in AWS
+
+# phases of build out
+1. repo and aws credential allocation
