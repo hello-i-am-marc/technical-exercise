@@ -55,7 +55,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v4
         with: { terraform_version: 1.15.5 }
       - run: terraform init
-      - run: terraform plan -no-color
+      - run: terraform plan -no-color -lock=false
 
   apply:
     needs: [validate, scan]
