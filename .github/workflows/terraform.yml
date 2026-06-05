@@ -16,8 +16,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<pinned-sha>
-      - uses: hashicorp/setup-terraform@<pinned-sha>
+      - uses: actions/checkout@v6
+      - uses: hashicorp/setup-terraform@v4
         with: { terraform_version: 1.15.5 }
       - run: terraform fmt -check -recursive
       - run: terraform init -backend=false
@@ -26,9 +26,9 @@ jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<pinned-sha>
+      - uses: actions/checkout@v6
       - name: Trivy (IaC misconfig)
-        uses: aquasecurity/trivy-action@<pinned-sha>
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
           scan-ref: .
@@ -36,7 +36,7 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: '1'
       - name: Checkov
-        uses: bridgecrewio/checkov-action@<pinned-sha>
+        uses: bridgecrewio/checkov-action@v12
         with:
           directory: .
           framework: terraform
@@ -47,12 +47,12 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@<pinned-sha>
-      - uses: aws-actions/configure-aws-credentials@<pinned-sha>
+      - uses: actions/checkout@v6
+      - uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
           role-to-assume: ${{ vars.AWS_PLAN_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-      - uses: hashicorp/setup-terraform@<pinned-sha>
+      - uses: hashicorp/setup-terraform@v4
         with: { terraform_version: 1.15.5 }
       - run: terraform init
       - run: terraform plan -no-color
@@ -63,12 +63,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - uses: actions/checkout@<pinned-sha>
-      - uses: aws-actions/configure-aws-credentials@<pinned-sha>
+      - uses: actions/checkout@v6
+      - uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
           role-to-assume: ${{ vars.AWS_APPLY_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-      - uses: hashicorp/setup-terraform@<pinned-sha>
+      - uses: hashicorp/setup-terraform@v4
         with: { terraform_version: 1.15.5 }
       - run: terraform init
       - run: terraform apply -auto-approve
