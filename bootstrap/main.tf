@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "gha_trust_apply" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_owner}/${var.github_repo}:ref:refs/heads/main"]
+      values   = ["repo:${var.github_owner}/${var.github_repo}:environment:production"]
     }
   }
 }
