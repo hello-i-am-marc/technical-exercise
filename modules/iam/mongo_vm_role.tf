@@ -56,3 +56,8 @@ resource "aws_iam_instance_profile" "mongo_vm" {
   name = "${var.project}-mongo-vm"
   role = aws_iam_role.mongo_vm.name
 }
+
+resource "aws_iam_role_policy_attachment" "mongo_vm_ssm" {
+  role       = aws_iam_role.mongo_vm.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
