@@ -9,6 +9,7 @@ resource "aws_instance" "mongo" {
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [var.mongo_vm_sg_id]
   iam_instance_profile   = var.mongo_vm_instance_profile_name
+  ebs_optimized          = true
 
   associate_public_ip_address = true  # intentional per exercise
 
