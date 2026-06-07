@@ -126,11 +126,27 @@ resource "aws_iam_role_policy" "plan_secrets_read" {
 
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Effect   = "Allow"
-      Action   = ["secretsmanager:GetSecretValue"]
-      Resource = "arn:aws:secretsmanager:*:${data.aws_caller_identity.current.account_id}:secret:${var.project}-*"
-    }]
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["secretsmanager:GetSecretValue"]
+        Resource = "arn:aws:secretsmanager:*:${data.aws_caller_identity.current.account_id}:secret:${var.project}-*"
+      },
+      {
+        # Secrets Manager calls kms:Decrypt on our behalf when retrieving
+        # CMK-encrypted secrets. Resource is * because the plan role doesn't
+        # reference specific CMK ARNs; kms:ViaService condition restricts
+        # decryption to only happen via Secrets Manager calls (defense in depth).
+        Effect   = "Allow"
+        Action   = ["kms:Decrypt"]
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "kms:ViaService" = "secretsmanager.us-east-1.amazonaws.com"
+          }
+        }
+      }
+    ]
   })
 }
 
