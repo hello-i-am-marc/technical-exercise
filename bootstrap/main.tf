@@ -116,5 +116,23 @@ resource "aws_iam_role_policy_attachment" "plan_readonly" {
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
+# Terraform refreshes aws_secretsmanager_secret_version by calling GetSecretValue.
+# ReadOnlyAccess intentionally excludes this action because it's sensitive.
+# Granted narrowly on project secrets only so plan can detect drift without
+# exposing other secrets in the account.
+resource "aws_iam_role_policy" "plan_secrets_read" {
+  name = "${var.project}-plan-secrets-read"
+  role = aws_iam_role.gha_plan.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["secretsmanager:GetSecretValue"]
+      Resource = "arn:aws:secretsmanager:*:${data.aws_caller_identity.current.account_id}:secret:${var.project}-*"
+    }]
+  })
+}
+
 output "gha_apply_role_arn" { value = aws_iam_role.gha_apply.arn }
 output "gha_plan_role_arn" { value = aws_iam_role.gha_plan.arn }
