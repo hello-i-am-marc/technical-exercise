@@ -2,6 +2,8 @@ resource "random_id" "backup_suffix" {
   byte_length = 4
 }
 
+# CMK encryption intentionally omitted; this bucket is publicly readable, encryption-at-rest provides little value
+#trivy:ignore:AVD-AWS-0132
 resource "aws_s3_bucket" "backups" {
   #checkov:skip=CKV_AWS_18:Access logging adds bucket-for-bucket-logs out of scope for exercise
   #checkov:skip=CKV_AWS_21:Versioning intentionally off; backups are append-only by name
@@ -13,7 +15,11 @@ resource "aws_s3_bucket" "backups" {
   force_destroy = true
 }
 
-# Block Public Access INTENTIONALLY DISABLED — the headline misconfig
+# Block Public Access intentionally disabled per exercise design (the headline misconfig)
+#trivy:ignore:AVD-AWS-0086
+#trivy:ignore:AVD-AWS-0087
+#trivy:ignore:AVD-AWS-0091
+#trivy:ignore:AVD-AWS-0093
 resource "aws_s3_bucket_public_access_block" "backups" {
   #checkov:skip=CKV_AWS_53:Intentional misconfig per exercise; bucket must be publicly readable
   #checkov:skip=CKV_AWS_54:Same
