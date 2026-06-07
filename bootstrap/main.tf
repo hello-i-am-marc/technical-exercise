@@ -117,4 +117,4 @@ resource "aws_iam_role_policy_attachment" "plan_readonly" {
 }
 
 output "gha_apply_role_arn" { value = aws_iam_role.gha_apply.arn }
-output "gha_plan_role_arn"  { value = aws_iam_role.gha_plan.arn }
+output "gha_plan_role_arn" { value = aws_iam_role.gha_plan.arn }
