@@ -18,11 +18,11 @@ resource "aws_iam_role_policy_attachment" "config" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWS_ConfigRole"
 }
 
-#checkov:skip=CKV_AWS_18: Access logging out of scope for exercise
-#checkov:skip=CKV2_AWS_61: Lifecycle config not needed for 2-week exercise
-#checkov:skip=CKV2_AWS_62: Event notifications not required for exercise
-#checkov:skip=CKV_AWS_144: Cross-region replication out of scope for single-region exercise
 resource "aws_s3_bucket" "config" {
+  #checkov:skip=CKV_AWS_18:Access logging out of scope for exercise
+  #checkov:skip=CKV2_AWS_61:Lifecycle config not needed for 2-week exercise
+  #checkov:skip=CKV2_AWS_62:Event notifications not required for exercise
+  #checkov:skip=CKV_AWS_144:Cross-region replication out of scope for single-region exercise
   bucket        = "${var.project}-config-${data.aws_caller_identity.current.account_id}-${random_id.suffix.hex}"
   force_destroy = true
 }

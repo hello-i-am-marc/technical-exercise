@@ -4,18 +4,18 @@ resource "aws_iam_policy" "workload_boundary" {
   policy      = data.aws_iam_policy_document.workload_boundary.json
 }
 
-# Permission boundary intentionally allows broad actions, capped by explicit Deny statements.
-# Checkov flags the broad Allow without understanding the deny-driven semantics that make boundaries work.
-#checkov:skip=CKV_AWS_1: Boundary semantics require broad Allow + targeted Deny
-#checkov:skip=CKV_AWS_49: Same pattern
-#checkov:skip=CKV_AWS_107: Boundary denies the escalation actions explicitly in DenyIAMEscalation
-#checkov:skip=CKV_AWS_108: Boundary scope is workload roles; data exfil paths require role attachment in Phase 4
-#checkov:skip=CKV_AWS_109: Same pattern
-#checkov:skip=CKV_AWS_110: Privilege escalation denied via DenyIAMEscalation
-#checkov:skip=CKV_AWS_111: Boundary pattern
-#checkov:skip=CKV_AWS_356: Boundary pattern
-#checkov:skip=CKV2_AWS_40: Boundary pattern; IAM privileges actively denied
 data "aws_iam_policy_document" "workload_boundary" {
+  # Permission boundary intentionally allows broad actions, capped by explicit Deny statements.
+  # Checkov flags the broad Allow without understanding the deny-driven semantics.
+  #checkov:skip=CKV_AWS_1:Boundary semantics require broad Allow + targeted Deny
+  #checkov:skip=CKV_AWS_49:Boundary pattern
+  #checkov:skip=CKV_AWS_107:Boundary denies escalation actions explicitly in DenyIAMEscalation
+  #checkov:skip=CKV_AWS_108:Boundary scope is workload roles; data exfil paths require role attachment in Phase 4
+  #checkov:skip=CKV_AWS_109:Boundary pattern
+  #checkov:skip=CKV_AWS_110:Privilege escalation denied via DenyIAMEscalation
+  #checkov:skip=CKV_AWS_111:Boundary pattern
+  #checkov:skip=CKV_AWS_356:Boundary pattern
+  #checkov:skip=CKV2_AWS_40:Boundary pattern; IAM privileges actively denied
   # Allow general read across services
   statement {
     sid       = "AllowGeneralRead"
