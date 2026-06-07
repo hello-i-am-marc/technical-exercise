@@ -2,7 +2,7 @@
 #trivy:ignore:AVD-AWS-0008
 resource "aws_instance" "mongo" {
   #checkov:skip=CKV_AWS_88:Public IP is intentional per exercise; SSH must be exposed to internet
-  #checkov:skip=CKV_AWS_135:Detailed monitoring out of scope for exercise budget
+  #checkov:skip=CKV_AWS_126:Detailed monitoring out of scope for exercise budget
 
   ami                    = data.aws_ami.ubuntu_jammy.id
   instance_type          = "t3.medium"

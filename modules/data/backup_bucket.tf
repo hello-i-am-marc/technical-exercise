@@ -9,6 +9,7 @@ resource "aws_s3_bucket" "backups" {
   #checkov:skip=CKV_AWS_21:Versioning intentionally off; backups are append-only by name
   #checkov:skip=CKV_AWS_144:Cross-region replication out of scope for single-region exercise
   #checkov:skip=CKV_AWS_145:KMS encryption omitted by intent; this bucket is publicly readable, encryption-at-rest provides little value
+  #checkov:skip=CKV2_AWS_6:Bucket is intentionally publicly readable per exercise; BPA disable is by design
   #checkov:skip=CKV2_AWS_61:Lifecycle config out of scope
   #checkov:skip=CKV2_AWS_62:Event notifications out of scope
   bucket        = "${var.project}-mongo-backups-${data.aws_caller_identity.current.account_id}-${random_id.backup_suffix.hex}"
@@ -23,8 +24,8 @@ resource "aws_s3_bucket" "backups" {
 resource "aws_s3_bucket_public_access_block" "backups" {
   #checkov:skip=CKV_AWS_53:Intentional misconfig per exercise; bucket must be publicly readable
   #checkov:skip=CKV_AWS_54:Same
+  #checkov:skip=CKV_AWS_55:Same
   #checkov:skip=CKV_AWS_56:Same
-  #checkov:skip=CKV_AWS_57:Same
   bucket                  = aws_s3_bucket.backups.id
   block_public_acls       = false
   block_public_policy     = false
