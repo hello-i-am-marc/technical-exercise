@@ -18,6 +18,8 @@ resource "aws_iam_role" "mongo_vm" {
 data "aws_iam_policy_document" "mongo_vm_inline" {
   #checkov:skip=CKV_AWS_1:Intentionally overprivileged per exercise; capped by permission boundary
   #checkov:skip=CKV_AWS_49:Same
+  #checkov:skip=CKV_AWS_107:Same; boundary denies the exfil paths in Phase 2.6
+  #checkov:skip=CKV_AWS_108:Same; boundary denies the credentials exposure paths
   #checkov:skip=CKV_AWS_109:Same
   #checkov:skip=CKV_AWS_111:Same
   #checkov:skip=CKV_AWS_356:Same
