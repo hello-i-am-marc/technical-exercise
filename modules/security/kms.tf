@@ -1,7 +1,7 @@
-#checkov:skip=CKV_AWS_109: KMS key policy resources scope to the attached key; * is the standard pattern
-#checkov:skip=CKV_AWS_111: Same as 109; KMS policy width is the canonical pattern
-#checkov:skip=CKV_AWS_356: Same; KMS policies inherently use * resources
 data "aws_iam_policy_document" "logs_kms" {
+  #checkov:skip=CKV_AWS_109:KMS key policy resources scope to the attached key; * is the standard pattern
+  #checkov:skip=CKV_AWS_111:KMS policy width is the canonical pattern
+  #checkov:skip=CKV_AWS_356:KMS policies inherently use * resources
   statement {
     sid       = "EnableRootPermissions"
     effect    = "Allow"

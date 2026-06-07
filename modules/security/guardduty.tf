@@ -1,5 +1,5 @@
-#checkov:skip=CKV2_AWS_3: Single-account, single-region deployment by design
 resource "aws_guardduty_detector" "main" {
+  #checkov:skip=CKV2_AWS_3:Single-account, single-region deployment by design
   enable                       = true
   finding_publishing_frequency = "FIFTEEN_MINUTES"
 }
