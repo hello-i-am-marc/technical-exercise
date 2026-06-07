@@ -1,3 +1,7 @@
+#checkov:skip=CKV_AWS_18: Access logging adds a recursive bucket-for-bucket-logs out of scope for this exercise
+#checkov:skip=CKV2_AWS_61: Lifecycle config not needed for 2-week exercise window
+#checkov:skip=CKV2_AWS_62: Event notifications not required for exercise
+#checkov:skip=CKV_AWS_144: Cross-region replication out of scope for single-region exercise
 resource "aws_s3_bucket" "trail" {
   bucket        = "${var.project}-cloudtrail-${data.aws_caller_identity.current.account_id}-${random_id.suffix.hex}"
   force_destroy = true # exercise teardown convenience
@@ -58,6 +62,9 @@ data "aws_iam_policy_document" "trail_bucket" {
   }
 }
 
+#checkov:skip=CKV_AWS_67: Single-region trail is a deliberate cost decision (documented in build plan)
+#checkov:skip=CKV_AWS_252: SNS topic integration optional, not in exercise scope
+#checkov:skip=CKV2_AWS_10: CloudWatch Logs integration out of scope; S3-only trail sufficient for the demo
 resource "aws_cloudtrail" "main" {
   name                          = "${var.project}-trail"
   s3_bucket_name                = aws_s3_bucket.trail.id

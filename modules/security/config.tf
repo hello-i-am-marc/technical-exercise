@@ -18,6 +18,10 @@ resource "aws_iam_role_policy_attachment" "config" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWS_ConfigRole"
 }
 
+#checkov:skip=CKV_AWS_18: Access logging out of scope for exercise
+#checkov:skip=CKV2_AWS_61: Lifecycle config not needed for 2-week exercise
+#checkov:skip=CKV2_AWS_62: Event notifications not required for exercise
+#checkov:skip=CKV_AWS_144: Cross-region replication out of scope for single-region exercise
 resource "aws_s3_bucket" "config" {
   bucket        = "${var.project}-config-${data.aws_caller_identity.current.account_id}-${random_id.suffix.hex}"
   force_destroy = true
@@ -32,6 +36,11 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "config" {
     }
     bucket_key_enabled = true
   }
+}
+
+resource "aws_s3_bucket_versioning" "config" {
+  bucket = aws_s3_bucket.config.id
+  versioning_configuration { status = "Enabled" }
 }
 
 resource "aws_s3_bucket_public_access_block" "config" {
