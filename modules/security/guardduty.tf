@@ -1,20 +1,13 @@
-resource "aws_guardduty_detector" "main" {
-  #checkov:skip=CKV2_AWS_3:Single-account, single-region deployment by design
-  enable                       = true
-  finding_publishing_frequency = "FIFTEEN_MINUTES"
-}
+# The sandbox came pre-configured with a GuardDuty detector deployed by the
+# Wiz starter CloudFormation stack. Only one detector is allowed per account
+# per region, so we reference the existing one rather than duplicating.
+# Wiz enabled most features; we add only RUNTIME_MONITORING, which the
+# starter left disabled.
 
-# EKS Audit Log Monitoring (free, baseline)
-resource "aws_guardduty_detector_feature" "eks_audit_logs" {
-  detector_id = aws_guardduty_detector.main.id
-  name        = "EKS_AUDIT_LOGS"
-  status      = "ENABLED"
-}
+data "aws_guardduty_detector" "existing" {}
 
-# Runtime Monitoring covers EC2 + ECS + EKS (supersedes EKS_RUNTIME_MONITORING).
-# Auto-deploys agent on EKS nodes; EC2 agent must be installed manually.
 resource "aws_guardduty_detector_feature" "runtime_monitoring" {
-  detector_id = aws_guardduty_detector.main.id
+  detector_id = data.aws_guardduty_detector.existing.id
   name        = "RUNTIME_MONITORING"
   status      = "ENABLED"
 

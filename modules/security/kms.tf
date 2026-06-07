@@ -14,9 +14,9 @@ data "aws_iam_policy_document" "logs_kms" {
   }
 
   statement {
-    sid    = "AllowCloudTrailEncrypt"
-    effect = "Allow"
-    actions = ["kms:GenerateDataKey*", "kms:DescribeKey"]
+    sid       = "AllowCloudTrailEncrypt"
+    effect    = "Allow"
+    actions   = ["kms:GenerateDataKey*", "kms:DescribeKey"]
     resources = ["*"]
     principals {
       type        = "Service"
@@ -30,8 +30,8 @@ data "aws_iam_policy_document" "logs_kms" {
   }
 
   statement {
-    sid    = "AllowCloudTrailDecrypt"
-    effect = "Allow"
+    sid       = "AllowCloudTrailDecrypt"
+    effect    = "Allow"
     actions   = ["kms:Decrypt"]
     resources = ["*"]
     principals {
@@ -41,9 +41,9 @@ data "aws_iam_policy_document" "logs_kms" {
   }
 
   statement {
-    sid    = "AllowConfigEncrypt"
-    effect = "Allow"
-    actions = ["kms:GenerateDataKey*", "kms:DescribeKey", "kms:Encrypt"]
+    sid       = "AllowConfigEncrypt"
+    effect    = "Allow"
+    actions   = ["kms:GenerateDataKey*", "kms:DescribeKey", "kms:Encrypt"]
     resources = ["*"]
     principals {
       type        = "Service"
