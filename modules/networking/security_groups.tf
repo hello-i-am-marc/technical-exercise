@@ -5,6 +5,8 @@ resource "aws_security_group" "mongo_vm" {
   vpc_id      = data.aws_vpc.main.id
 }
 
+# SSH from 0.0.0.0/0 is intentional per exercise design
+#trivy:ignore:AVD-AWS-0107
 resource "aws_vpc_security_group_ingress_rule" "mongo_ssh" {
   #checkov:skip=CKV_AWS_24:SSH from 0.0.0.0/0 is intentional per exercise requirements
   security_group_id = aws_security_group.mongo_vm.id
@@ -33,6 +35,8 @@ resource "aws_vpc_security_group_ingress_rule" "mongo_db_from_private_two" {
   cidr_ipv4         = data.aws_subnet.private_two.cidr_block
 }
 
+# 0.0.0.0/0 egress required for S3 backup uploads and OS package updates
+#trivy:ignore:AVD-AWS-0104
 resource "aws_vpc_security_group_egress_rule" "mongo_all_outbound" {
   security_group_id = aws_security_group.mongo_vm.id
   description       = "All outbound (S3 backup uploads, OS package updates)"
