@@ -1,5 +1,6 @@
 # Mongo VM SG: SSH from internet (intentional), Mongo only from private subnet CIDRs
 resource "aws_security_group" "mongo_vm" {
+  #checkov:skip=CKV2_AWS_5:SG attached to Mongo VM instance in later stage (phase 4)
   name        = "${var.project}-mongo-vm"
   description = "Mongo VM: SSH exposed to internet by exercise design; Mongo port restricted to private subnets"
   vpc_id      = data.aws_vpc.main.id
@@ -46,6 +47,7 @@ resource "aws_vpc_security_group_egress_rule" "mongo_all_outbound" {
 
 # ALB SG: HTTP/HTTPS from internet
 resource "aws_security_group" "alb" {
+  #checkov:skip=CKV2_AWS_5:SG attached to ALB in via AWS Load Balancer Controller later (phase 5)
   name        = "${var.project}-alb"
   description = "Application Load Balancer: HTTP/HTTPS from internet"
   vpc_id      = data.aws_vpc.main.id
