@@ -15,4 +15,16 @@ resource "aws_guardduty_detector_feature" "runtime_monitoring" {
     name   = "EKS_ADDON_MANAGEMENT"
     status = "ENABLED"
   }
+
+  # AWS returns these in the API response even when unconfigured; declare
+  # explicitly to avoid Terraform attempting to remove them on every plan.
+  additional_configuration {
+    name   = "EC2_AGENT_MANAGEMENT"
+    status = "DISABLED"
+  }
+
+  additional_configuration {
+    name   = "ECS_FARGATE_AGENT_MANAGEMENT"
+    status = "DISABLED"
+  }
 }
