@@ -11,7 +11,11 @@ resource "aws_s3_bucket_versioning" "trail" {
 resource "aws_s3_bucket_server_side_encryption_configuration" "trail" {
   bucket = aws_s3_bucket.trail.id
   rule {
-    apply_server_side_encryption_by_default { sse_algorithm = "AES256" }
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
+      kms_master_key_id = aws_kms_key.logs.arn
+    }
+    bucket_key_enabled = true  # reduces per-object KMS API cost
   }
 }
 
@@ -60,6 +64,7 @@ resource "aws_cloudtrail" "main" {
   enable_log_file_validation    = true
   include_global_service_events = true
   is_multi_region_trail         = false
-
+  kms_key_id                    = aws_kms_key.logs.arn
+  
   depends_on = [aws_s3_bucket_policy.trail]
 }
