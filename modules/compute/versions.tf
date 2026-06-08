@@ -10,5 +10,11 @@ terraform {
     helm = {
       source = "hashicorp/helm"
     }
+    http = {
+      source = "hashicorp/http"
+    }
+    tls = {
+      source = "hashicorp/tls"
+    }
   }
 }

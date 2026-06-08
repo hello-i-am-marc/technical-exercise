@@ -46,6 +46,9 @@ jobs:
     needs: [validate, scan]
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_admin_user_arn: ${{ vars.ADMIN_USER_ARN }}
+      TF_VAR_admin_cidr: ${{ vars.ADMIN_CIDR }}
     steps:
       - uses: actions/checkout@v6
       - uses: aws-actions/configure-aws-credentials@v6.1.0
@@ -62,6 +65,9 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
+    env:
+      TF_VAR_admin_user_arn: ${{ vars.ADMIN_USER_ARN }}
+      TF_VAR_admin_cidr: ${{ vars.ADMIN_CIDR }}
     steps:
       - uses: actions/checkout@v6
       - uses: aws-actions/configure-aws-credentials@v6.1.0
