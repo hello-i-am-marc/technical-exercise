@@ -23,3 +23,17 @@ module "data" {
   mongo_vm_role_name             = module.iam.mongo_vm_role_name
   logs_kms_key_arn               = module.security.logs_kms_key_arn
 }
+
+module "compute" {
+  source             = "./modules/compute"
+  project            = var.project
+  k8s_version        = var.k8s_version
+  cluster_role_arn   = module.iam.eks_cluster_role_arn
+  node_role_arn      = module.iam.eks_node_role_arn
+  vpc_id             = module.networking.vpc_id
+  public_subnet_ids  = module.networking.public_subnet_ids
+  private_subnet_ids = module.networking.private_subnet_ids
+  logs_kms_key_arn   = module.security.logs_kms_key_arn
+  admin_user_arn     = var.admin_user_arn
+  admin_cidr         = var.admin_cidr
+}

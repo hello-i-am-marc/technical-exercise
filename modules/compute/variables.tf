@@ -1,0 +1,10 @@
+variable "project"            { type = string }
+variable "k8s_version"        { type = string }
+variable "cluster_role_arn"   { type = string }
+variable "node_role_arn"      { type = string }
+variable "vpc_id"             { type = string }
+variable "public_subnet_ids"  { type = list(string) }
+variable "private_subnet_ids" { type = list(string) }
+variable "logs_kms_key_arn"   { type = string }
+variable "admin_user_arn"     { type = string }
+variable "admin_cidr"         { type = string }
