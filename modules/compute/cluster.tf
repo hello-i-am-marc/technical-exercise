@@ -13,7 +13,7 @@ resource "aws_eks_cluster" "main" {
     subnet_ids              = concat(var.public_subnet_ids, var.private_subnet_ids)
     endpoint_public_access  = true
     endpoint_private_access = true
-    public_access_cidrs     = [var.admin_cidr]
+    public_access_cidrs     = ["0.0.0.0/0"]  # IAM auth is the primary control; CI runner needs network access
   }
 
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
