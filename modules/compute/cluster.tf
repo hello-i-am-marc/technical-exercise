@@ -1,3 +1,5 @@
+# Public endpoint access enabled but restricted via public_access_cidrs to admin CIDR only
+#trivy:ignore:AVD-AWS-0040
 resource "aws_eks_cluster" "main" {
   #checkov:skip=CKV_AWS_38:Public endpoint access enabled but restricted by public_access_cidrs to admin CIDR only
   #checkov:skip=CKV_AWS_39:Same; admin_cidr is operator-provided narrow CIDR
