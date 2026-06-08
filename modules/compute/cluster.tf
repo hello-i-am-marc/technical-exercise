@@ -1,8 +1,10 @@
-# Public endpoint access enabled but restricted via public_access_cidrs to admin CIDR only
+# Public endpoint access enabled with broad CIDR; IAM authentication is the primary control
+# Required because CI/CD runners need to manage K8s resources via the cluster API
 #trivy:ignore:AVD-AWS-0040
+#trivy:ignore:AVD-AWS-0041
 resource "aws_eks_cluster" "main" {
-  #checkov:skip=CKV_AWS_38:Public endpoint access enabled but restricted by public_access_cidrs to admin CIDR only
-  #checkov:skip=CKV_AWS_39:Same; admin_cidr is operator-provided narrow CIDR
+  #checkov:skip=CKV_AWS_38:Public endpoint access enabled; IAM auth gates all API calls
+  #checkov:skip=CKV_AWS_39:Public CIDR open to enable CI/CD runner access; IAM is the primary security control
   #checkov:skip=CKV_AWS_339:Using current EKS-supported Kubernetes version per var.k8s_version
 
   name     = "${var.project}-cluster"
