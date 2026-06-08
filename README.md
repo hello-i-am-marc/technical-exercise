@@ -7,3 +7,4 @@ a two-tier webapp designed to be intentionally misconfigured and later secured, 
 3. network and iam creation
 4. mongo db plus public s3
 5. k8s cluster
+6. app pipeline and app deployment
