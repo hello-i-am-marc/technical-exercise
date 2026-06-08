@@ -1,3 +1,6 @@
+# Intentional choices for exercise speed: MUTABLE tags allow iterative pushes; AES256 encryption
+# (vs CMK) keeps scope tight. Both documented as Phase 7 hardening options.
+#trivy:ignore:AVD-AWS-0031
 resource "aws_ecr_repository" "app" {
   #checkov:skip=CKV_AWS_136:Using AES256 encryption for exercise speed; CMK encryption documented as Phase 7 hardening option
   #checkov:skip=CKV_AWS_51:Tag mutability MUTABLE for iteration speed; IMMUTABLE documented as stricter alternative
