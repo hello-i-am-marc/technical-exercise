@@ -1,0 +1,74 @@
+name: container
+
+on:
+  pull_request:
+    paths: ['app/**', '.github/workflows/container.yml']
+  push:
+    branches: [main]
+    paths: ['app/**', '.github/workflows/container.yml']
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build_and_scan:
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - id: tag
+        run: echo "tag=${GITHUB_SHA::12}" >> $GITHUB_OUTPUT
+
+      - name: Build image
+        run: |
+          docker build -t app:${{ steps.tag.outputs.tag }} ./app
+
+      - name: Trivy image scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: app:${{ steps.tag.outputs.tag }}
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: HIGH,CRITICAL
+
+  push_and_deploy:
+    needs: build_and_scan
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: aws-actions/configure-aws-credentials@v6.1.0
+        with:
+          role-to-assume: ${{ vars.AWS_CONTAINER_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: ecr_login
+
+      - name: Build and push image
+        env:
+          REGISTRY: ${{ steps.ecr_login.outputs.registry }}
+          IMAGE_TAG: ${{ needs.build_and_scan.outputs.image_tag }}
+        run: |
+          docker build -t ${REGISTRY}/tech-exercise-app:${IMAGE_TAG} ./app
+          docker push ${REGISTRY}/tech-exercise-app:${IMAGE_TAG}
+
+      - name: Configure kubectl
+        run: aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name tech-exercise-cluster
+
+      - name: Deploy to EKS
+        env:
+          REGISTRY: ${{ steps.ecr_login.outputs.registry }}
+          IMAGE_TAG: ${{ needs.build_and_scan.outputs.image_tag }}
+        run: |
+          sed -i "s|REPLACE_AT_DEPLOY_TIME|${REGISTRY}/tech-exercise-app:${IMAGE_TAG}|g" app/manifests/deployment.yaml
+          kubectl apply -f app/manifests/deployment.yaml
+          kubectl apply -f app/manifests/service.yaml
+          kubectl apply -f app/manifests/ingress.yaml
+          kubectl rollout status deployment/app -n app --timeout=300s
