@@ -18,3 +18,13 @@ variable "admin_cidr" {
   type        = string
   description = "Your current public IP in CIDR form (e.g., 1.2.3.4/32) for EKS public endpoint access"
 }
+
+variable "github_owner" {
+  type        = string
+  description = "GitHub username/org that owns the repo"
+}
+
+variable "github_repo" {
+  type        = string
+  description = "GitHub repository name"
+}
