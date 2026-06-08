@@ -4,7 +4,7 @@ resource "aws_instance" "mongo" {
   #checkov:skip=CKV_AWS_88:Public IP is intentional per exercise; SSH must be exposed to internet
   #checkov:skip=CKV_AWS_126:Detailed monitoring out of scope for exercise budget
 
-  ami                    = data.aws_ami.ubuntu_jammy.id
+  ami                    = data.aws_ami.ubuntu_focal.id
   instance_type          = "t3.medium"
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [var.mongo_vm_sg_id]
@@ -36,7 +36,7 @@ resource "aws_instance" "mongo" {
 
   user_data_replace_on_change = true
 
-  # SSM agent is included in the Ubuntu 22.04 AMI; no extra install needed
+  # SSM agent should be included in the Ubuntu AMI; no extra install needed
   tags = {
     Name = "${var.project}-mongo-vm"
   }
