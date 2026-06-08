@@ -5,7 +5,8 @@ data "aws_region" "current" {}
 # Deprecated by Canonical (standard support ended April 2025) but still launchable
 data "aws_ami" "ubuntu_focal" {
   owners = ["099720109477"]  # Canonical
-
+  include_deprecated = true
+  
   filter {
     name   = "image-id"
     values = ["ami-0efd657a42099f98f"]
