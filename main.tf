@@ -44,6 +44,6 @@ module "app" {
   github_owner            = var.github_owner
   github_repo             = var.github_repo
   cluster_name            = module.compute.cluster_name
-  cluster_arn             = module.compute.cluster_arn  # needs to be added as a Phase 5 output
-  mongo_vm_private_ip     = module.data.mongo_vm_private_ip  # needs to be added as a Phase 4 output
+  cluster_arn             = module.compute.cluster_arn
+  mongo_vm_private_ip     = module.data.mongo_vm_private_ip
 }
