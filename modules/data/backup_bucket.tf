@@ -27,7 +27,7 @@ resource "aws_s3_bucket_public_access_block" "backups" {
   #checkov:skip=CKV_AWS_55:Same
   #checkov:skip=CKV_AWS_56:Same
   bucket                  = aws_s3_bucket.backups.id
-  block_public_acls       = false
+  block_public_acls       = true
   block_public_policy     = false
   ignore_public_acls      = false
   restrict_public_buckets = false
